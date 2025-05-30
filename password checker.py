@@ -23,7 +23,7 @@ def check_common_passwords():
         password = password.replace("\n", "")
         clean_passwords.append(password)
     
-    if password in clean_passwords:
+    if password_input.text in clean_passwords:
         check_password.text = "Password is common. \nPlease choose a different one."
  
     # if "liverpool" in clean_passwords:
@@ -35,7 +35,7 @@ def check_common_passwords():
 
 ###### Create the app window ######
 
-app = gp.GooeyPieApp("Password Checker")
+app = gp.GooeyPieApp("Passolution")
 app.set_size(500, 300)
 
 ##### Create widgets ######
@@ -53,7 +53,7 @@ test_new = gp.Label(app, "4, 4")
 sep_v = gp.Separator(app, 'vertical')
 explain_procedure = gp.Label(app, "Enter password:")
 intro_of_app = gp.Label(app, "Only the fittest passwords survive.")
-title = gp.Label(app, "Passolution")
+
 
 check_password = gp.Label(app, "")
 
@@ -66,9 +66,7 @@ app.set_grid(7, 3)
 ###### Add widgets to the grid ######
 #app.add(title, 1, 1)
 #app.add(intro_of_app, 2, 1, column_span=2)
-app.add(intro_of_app, 2, 1, column_span=3, align='center')
-app.add(title, 1, 1, column_span=3, align='center')
-
+app.add(intro_of_app, 1, 1, column_span=3, align='center')
 
 app.add(password_input, 3, 2)
 app.add(explain_procedure, 3, 1, align='right')
