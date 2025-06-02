@@ -24,7 +24,7 @@ def check_common_passwords():
         clean_passwords.append(password)
     
     if password_input.text in clean_passwords:
-        check_password.text = "Password is very common. \n It's recommended you don't use it."
+        check_password.text = "Password is very common. \nIt's recommended you don't use it."
     else:
         check_password.text = ""
 
@@ -32,7 +32,7 @@ def check_common_passwords():
 ###### Create the app window ######
 
 app = gp.GooeyPieApp("Passolution")
-app.set_size(500, 300)
+app.set_size(600, 300)
 
 ##### Create widgets ######
 
@@ -71,7 +71,7 @@ app.add(submit_bin, 4, 2, align='left')
 app.add(result_lbl_title, 5, 1)
 app.add(level_of_password, 6,1, column_span=2)
 
-app.add(sep_v, 5, 2, row_span=3, align='center')
+app.add(sep_v, 5,2, row_span=3, align='center')
 
 app.add(check_password,7,1)
 
@@ -81,3 +81,4 @@ app.add(check_password,7,1)
 app.run()
 
 
+# problem: line is not working to seperate the two columns
