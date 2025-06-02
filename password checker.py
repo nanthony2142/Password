@@ -24,14 +24,10 @@ def check_common_passwords():
         clean_passwords.append(password)
     
     if password_input.text in clean_passwords:
-        check_password.text = "Password is common. \nPlease choose a different one."
- 
-    # if "liverpool" in clean_passwords:
-    #     print("Yes")
-    # else:
-    #     print("No")
-    
-    # f.close()
+        check_password.text = "Password is very common. \n It's recommended you don't use it."
+    else:
+        check_password.text = ""
+
 
 ###### Create the app window ######
 
