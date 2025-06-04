@@ -8,7 +8,7 @@ for password in common_passwords:
     password = password.replace("\n", "")
     clean_passwords.append(password)
 
-if 'hiiiiii' in clean_passwords:
+if 'therefore' in clean_passwords:
     print("Yes")
 else:
     print("No")
