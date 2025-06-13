@@ -1,12 +1,18 @@
 import gooeypie as gp
+import hashlib
+import requests
 symbols = ["!", "@", "#", "$", "%", "^", "&", "*", "(", ")", "-", "_", "+", "=", "{", "}", "[", "]", "|", ";", ":", "'", '"', "<", ">", ",", ".", "?", "/"]
 letters = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z",]
-
+length_points = 1
+character_points = 1
+common_word_points = 1
 
 def check_password_length(event):
+    global length_points
     result_lbl_title.text = "Feedback:"
     password = password_input.text
     if len(password) >= 12:
+        length_points = 5 
         level_of_password.text = "Your password length is great and secure."
 
     elif len(password) >=8:
@@ -20,6 +26,7 @@ def check_password_length(event):
 
     else:
         level_of_password.text = "Your password length is terrible,\nIt needs to be so much longer."
+    
 
     check_characters()
 
@@ -45,11 +52,9 @@ def check_characters():
     
     elif any(char in letters for char in password):
         password_strength.text = "Your password is very weak it would be\nbetter if it included numbers and symbols."
-    check_common_passwords()
-
-
     
-   
+    check_common_passwords()
+  
 def check_common_passwords():
     f = open("common_passwords.txt")
     
@@ -77,9 +82,31 @@ def check_common_passwords():
         else:
             check_password.text = ""
 
-def visual_feedback():
-    pass
+            
+        sha1_password = hashlib.sha1(password.encode('utf-8')).hexdigest().upper()
+        prefix = sha1_password[:5]
+        suffix = sha1_password[5:]
 
+        url = f"https://api.pwnedpasswords.com/range/{prefix}"
+        res = requests.get(url)
+        if res.status_code != 200:
+            raise RuntimeError(f"Error fetching: {res.status_code}")
+
+        hashes = (line.split(':') for line in res.text.splitlines())
+        for h, count in hashes:
+            if h == suffix:
+                return int(count)  # Number of times password was found
+        return 0  # Password not found
+
+        print(check_password_pwned("nathan"))  # Example usage
+
+
+    visual_feedback()
+    
+def visual_feedback():
+    global length_points, character_points, common_word_points
+    points_info.text = length_points
+    
 ###### Create the app window ######
 
 app = gp.GooeyPieApp("Passolution")
@@ -102,8 +129,10 @@ explain_procedure = gp.Label(app, "Enter password:")
 intro_of_app = gp.Label(app, "Only the fittest passwords survive.")
 password_strength = gp.Label(app, "")
 check_password = gp.Label(app, "")
+points_info = gp.Label(app, "")
 
-star_png = gp.Image(app, 'images/star.png')
+
+# star_png = gp.Image(app, 'images/star.png')
 
 
 
@@ -129,7 +158,9 @@ app.add(password_strength, 7,1)
 
 app.add(check_password,8,1)
 
-app.add(star_png, 7, 3)
+app.add(points_info, 7,3)
+
+# app.add(star_png, 7, 3)
 
 
 ###### run the app ######
