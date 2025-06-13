@@ -77,6 +77,9 @@ def check_common_passwords():
         else:
             check_password.text = ""
 
+def visual_feedback():
+    pass
+
 ###### Create the app window ######
 
 app = gp.GooeyPieApp("Passolution")
@@ -97,11 +100,10 @@ test_new = gp.Label(app, "4, 4")
 sep_v = gp.Separator(app, 'vertical')
 explain_procedure = gp.Label(app, "Enter password:")
 intro_of_app = gp.Label(app, "Only the fittest passwords survive.")
-
 password_strength = gp.Label(app, "")
-
-
 check_password = gp.Label(app, "")
+
+star_png = gp.Image(app, 'images/star.png')
 
 
 
@@ -126,6 +128,8 @@ app.add(sep_v, 5,2, row_span=4, align='center')
 app.add(password_strength, 7,1)
 
 app.add(check_password,8,1)
+
+app.add(star_png, 7, 3)
 
 
 ###### run the app ######
