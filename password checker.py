@@ -3,16 +3,32 @@ import hashlib
 import requests
 symbols = ["!", "@", "#", "$", "%", "^", "&", "*", "(", ")", "-", "_", "+", "=", "{", "}", "[", "]", "|", ";", ":", "'", '"', "<", ">", ",", ".", "?", "/"]
 letters = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z",]
-length_points = 1
-character_points = 1
-common_word_points = 1
+#length_points = 1
+#character_points = 1
+#common_word_points = 1
+
+def check_breaches():        
+        sha1_password = hashlib.sha1(password_input.text.encode('utf-8')).hexdigest().upper()
+        prefix = sha1_password[:5]
+        suffix = sha1_password[5:]
+
+        url = f"https://api.pwnedpasswords.com/range/{prefix}"
+        res = requests.get(url)
+        if res.status_code != 200:
+            raise RuntimeError(f"Error fetching: {res.status_code}")
+
+        hashes = (line.split(':') for line in res.text.splitlines())
+        for h, count in hashes:
+            if h == suffix:
+                return int(count)  # Number of times password was found
+        return 0  # Password not found
 
 def check_password_length(event):
-    global length_points
+    #global length_points
     result_lbl_title.text = "Feedback:"
     password = password_input.text
     if len(password) >= 12:
-        length_points = 5 
+      #  length_points = 5 
         level_of_password.text = "Your password length is great and secure."
 
     elif len(password) >=8:
@@ -81,36 +97,24 @@ def check_common_passwords():
             check_password.text = "Your password contains very common words.\nIt's recommended you don't use it."
         else:
             check_password.text = ""
+    breach_count = check_breaches()
 
-            
-        sha1_password = hashlib.sha1(password.encode('utf-8')).hexdigest().upper()
-        prefix = sha1_password[:5]
-        suffix = sha1_password[5:]
-
-        url = f"https://api.pwnedpasswords.com/range/{prefix}"
-        res = requests.get(url)
-        if res.status_code != 200:
-            raise RuntimeError(f"Error fetching: {res.status_code}")
-
-        hashes = (line.split(':') for line in res.text.splitlines())
-        for h, count in hashes:
-            if h == suffix:
-                return int(count)  # Number of times password was found
-        return 0  # Password not found
-
-        print(check_password_pwned("nathan"))  # Example usage
+    if breach_count == 0:
+        amount_of_breaches.text = "There are no known breaches with that password"
+    else:
+        amount_of_breaches.text = "There are {} breaches with that password".format(breach_count)
 
 
-    visual_feedback()
+    #visual_feedback()
     
-def visual_feedback():
-    global length_points, character_points, common_word_points
-    points_info.text = length_points
+#def visual_feedback():
+   # global length_points, character_points, common_word_points
+    #points_info.text = length_points
     
 ###### Create the app window ######
 
 app = gp.GooeyPieApp("Passolution")
-app.set_size(600, 300)
+app.set_size(600, 400)
 
 ##### Create widgets ######
 
@@ -129,7 +133,8 @@ explain_procedure = gp.Label(app, "Enter password:")
 intro_of_app = gp.Label(app, "Only the fittest passwords survive.")
 password_strength = gp.Label(app, "")
 check_password = gp.Label(app, "")
-points_info = gp.Label(app, "")
+#points_info = gp.Label(app, "")
+amount_of_breaches = gp.Label(app, "")
 
 
 # star_png = gp.Image(app, 'images/star.png')
@@ -141,24 +146,25 @@ points_info = gp.Label(app, "")
 app.set_grid(8, 3)
 
 ###### Add widgets to the grid ######
-#app.add(title, 1, 1)
-#app.add(intro_of_app, 2, 1, column_span=2)
+
 app.add(intro_of_app, 1, 1, column_span=3, align='center')
 
-app.add(password_input, 3, 2)
-app.add(explain_procedure, 3, 1, align='right')
-app.add(submit_bin, 4, 2, align='left')
+app.add(password_input, 2, 2)
+app.add(explain_procedure, 2, 1, align='right')
+app.add(submit_bin, 3, 2, align='left')
 
-app.add(result_lbl_title, 5, 1)
-app.add(level_of_password, 6,1, column_span=2)
+app.add(result_lbl_title, 4, 1)
+app.add(level_of_password, 5,1, column_span=2)
 
-app.add(sep_v, 5,2, row_span=4, align='center')
+app.add(sep_v, 4,2, row_span=5, align='center')
 
-app.add(password_strength, 7,1)
+app.add(password_strength, 6,1)
 
-app.add(check_password,8,1)
+app.add(check_password,7,1)
 
-app.add(points_info, 7,3)
+#app.add(points_info, 6,3)
+
+app.add(amount_of_breaches, 8,1)
 
 # app.add(star_png, 7, 3)
 

@@ -17,4 +17,4 @@ def check_password_pwned(password):
             return int(count)  # Number of times password was found
     return 0  # Password not found
 
-print(check_password_pwned("nathan"))  # Example usage
+print(check_password_pwned("ushushushushushush"))  # Example usage
