@@ -7,6 +7,7 @@ capital = [letter.upper() for letter in letters]
 length_points = 0.5
 character_points = 0.5
 common_word_points = 0.5
+points = 0
 
 def check_breaches():        
         sha1_password = hashlib.sha1(password_input.text.encode('utf-8')).hexdigest().upper()
@@ -52,34 +53,44 @@ def check_password_length(event):
     check_characters()
 
 def check_characters():
+    global character_points
     password = password_input.text
     if any(char.isdigit() for char in password) and any(char in symbols for char in password) and any(char in letters for char in password) and any(char in capital for char in password):
         password_strength.text = "Your password has a very diverse range of characters."
+        character_points = 5
     
     elif any(char.isdigit() for char in password) and any(char in symbols for char in password) and any(char in letters for char in password):
         password_strength.text = "Your password has a decent range of characters.\n It would be better if it included a capital letter."
+        character_points = 4.5
 
     elif any(char.isdigit() for char in password) and any(char in letters for char in password):
         password_strength.text = "Your password would be better\nif it included symbols such as @."
+        character_points = 3
     
     elif any(char in symbols for char in password) and any(char in letters for char in password):
         password_strength.text = "Your password would be better\nif it included numbers such as 1."
+        character_points = 3
 
     elif any(char.isdigit() for char in password) and any(char in symbols for char in password):
         password_strength.text = "Your password would be better if it\nincluded letters such as the letter 'a'."
+        character_points = 3
 
     elif any(char.isdigit() for char in password):
         password_strength.text = "Your password is very weak it would be\nbetter if it included letters and symbols."
+        character_points = 2
     
     elif any(char in symbols for char in password):
         password_strength.text = "Your password is very weak it would be\nbetter if it included letters and numbers."
+        character_points = 2
     
     elif any(char in letters for char in password):
         password_strength.text = "Your password is very weak it would be\nbetter if it included numbers and symbols."
+        character_points = 2
     
     check_common_passwords()
   
 def check_common_passwords():
+    global points, common_word_points
     f = open("common_passwords.txt")
     
     common_passwords = f.readlines()
@@ -91,8 +102,10 @@ def check_common_passwords():
     
     if password_input.text in clean_passwords:
         check_password.text = "Your password is very commonly used. \nIt's highly recommended you don't use it."
+        points = 0
     else:
         f = open("common_words.txt")
+        points = 2
     
         common_words = f.readlines()
         clean_words = []
@@ -103,14 +116,18 @@ def check_common_passwords():
         
         if password_input.text in clean_words:
             check_password.text = "Your password contains very common words.\nIt's recommended you don't use it."
+            common_word_points = 0
         else:
-            check_password.text = ""
+            points = 2
+
     breach_count = check_breaches()
 
     if breach_count == 0:
         amount_of_breaches.text = "There are no known breaches with that password"
+        points = 2.5
     else:
         amount_of_breaches.text = "There are {} breaches with that password".format(breach_count)
+        points = 0
 
 
     visual_feedback()
