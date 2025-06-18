@@ -3,11 +3,14 @@ import hashlib
 import requests
 symbols = ["!", "@", "#", "$", "%", "^", "&", "*", "(", ")", "-", "_", "+", "=", "{", "}", "[", "]", "|", ";", ":", "'", '"', "<", ">", ",", ".", "?", "/"]
 letters = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z",]
+fonts = ['verdana']
+styles = ['italic']
+
 capital = [letter.upper() for letter in letters]
-length_points = 0.5
-character_points = 0.5
-common_word_points = 0.5
-points = 0
+length_points = 1
+character_points = 1
+points = 1
+
 
 def check_breaches():        
         sha1_password = hashlib.sha1(password_input.text.encode('utf-8')).hexdigest().upper()
@@ -47,7 +50,7 @@ def check_password_length(event):
 
     else:
         level_of_password.text = "Your password length is terrible,\nIt needs to be so much longer."
-        length_points = 0.5
+        length_points = 1
     
 
     check_characters()
@@ -61,7 +64,7 @@ def check_characters():
     
     elif any(char.isdigit() for char in password) and any(char in symbols for char in password) and any(char in letters for char in password):
         password_strength.text = "Your password has a decent range of characters.\n It would be better if it included a capital letter."
-        character_points = 4.5
+        character_points = 4
 
     elif any(char.isdigit() for char in password) and any(char in letters for char in password):
         password_strength.text = "Your password would be better\nif it included symbols such as @."
@@ -77,15 +80,15 @@ def check_characters():
 
     elif any(char.isdigit() for char in password):
         password_strength.text = "Your password is very weak it would be\nbetter if it included letters and symbols."
-        character_points = 2
+        character_points = 1
     
     elif any(char in symbols for char in password):
         password_strength.text = "Your password is very weak it would be\nbetter if it included letters and numbers."
-        character_points = 2
+        character_points = 1
     
     elif any(char in letters for char in password):
         password_strength.text = "Your password is very weak it would be\nbetter if it included numbers and symbols."
-        character_points = 2
+        character_points = 1
     
     check_common_passwords()
   
@@ -102,10 +105,10 @@ def check_common_passwords():
     
     if password_input.text in clean_passwords:
         check_password.text = "Your password is very commonly used. \nIt's highly recommended you don't use it."
-        points = 0
+        points = points + 0
     else:
         f = open("common_words.txt")
-        points = 2
+        points = points + 2
     
         common_words = f.readlines()
         clean_words = []
@@ -116,18 +119,18 @@ def check_common_passwords():
         
         if password_input.text in clean_words:
             check_password.text = "Your password contains very common words.\nIt's recommended you don't use it."
-            common_word_points = 0
+            points = points + 0
         else:
-            points = 2
+            points = points + 2
 
     breach_count = check_breaches()
 
     if breach_count == 0:
         amount_of_breaches.text = "There are no known breaches with that password"
-        points = 2.5
+        points = points + 3
     else:
         amount_of_breaches.text = "There are {} breaches with that password".format(breach_count)
-        points = 0
+        points = points + 2
 
 
     visual_feedback()
@@ -136,8 +139,8 @@ def visual_feedback():
     global length_points, character_points, common_word_points
     points_length.text = (length_points)
     points_character.text = (character_points)
-    points_words.text = (common_word_points)
-    points_overall.text = ((length_points + character_points + common_word_points)/3)
+    points_words.text = (points)
+    points_overall.text = ((length_points + character_points + points)/3)
     
 ###### Create the app window ######
 
@@ -158,7 +161,14 @@ submit_bin = gp.Button(app, "Check password", check_password_length)
 test_new = gp.Label(app, "4, 4")
 sep_v = gp.Separator(app, 'vertical')
 explain_procedure = gp.Label(app, "Enter password:")
-intro_of_app = gp.Label(app, "Only the fittest passwords survive.")
+
+
+intro_of_app = gp.StyleLabel(app, "Only the fittest passwords survive!")
+intro_of_app.font_name = 'Verdana' 
+intro_of_app.font_size = 25            
+intro_of_app.font_style = 'italic'      
+
+
 password_strength = gp.Label(app, "")
 check_password = gp.Label(app, "")
 
@@ -167,9 +177,6 @@ points_character = gp.Label(app, "")
 points_words = gp.Label(app, "")
 points_length = gp.Label(app, "")
 amount_of_breaches = gp.Label(app, "")
-
-
-# star_png = gp.Image(app, 'images/star.png')
 
 
 
@@ -201,7 +208,6 @@ app.add(points_overall, 4,3)
 
 app.add(amount_of_breaches, 8,1)
 
-# app.add(star_png, 7, 3)
 
 
 ###### run the app ######
