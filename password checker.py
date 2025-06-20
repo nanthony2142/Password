@@ -11,9 +11,10 @@ capital = [letter.upper() for letter in letters]
 length_points = 1
 character_points = 1
 points_common = 1
+total_points = 1
+points_common = 0
 points_words = 0
 points_breaches = 0
-points = 0
 
 def check_breaches():        
         sha1_password = hashlib.sha1(password_input.text.encode('utf-8')).hexdigest().upper()
@@ -96,7 +97,12 @@ def check_characters():
     check_common_passwords()
   
 def check_common_passwords():
-    global points, points_common, points_words, points_breaches
+    global total_points, points_common, points_words, points_breaches
+
+    points_common = 0
+    points_words = 0
+    points_breaches = 0
+
     f = open("common_passwords.txt")
     
     common_passwords = f.readlines()
@@ -109,6 +115,7 @@ def check_common_passwords():
     if password_input.text in clean_passwords:
         check_password.text = "Your password is very commonly used. \nIt's highly recommended you don't use it."
     else:
+        check_password.text = ""
         points_common = 1
 
     f = open("common_words.txt")
@@ -123,6 +130,7 @@ def check_common_passwords():
     if password_input.text in clean_words:
         check_password.text = "Your password contains very common words.\nIt's recommended you don't use it."
     else:
+        check_password.text = ""
         points_words = 1
 
     breach_count = check_breaches()
@@ -133,14 +141,16 @@ def check_common_passwords():
     else:
         amount_of_breaches.text = "There are {} breaches with that password".format(breach_count)
 
+    total_points = points_common + points_breaches + points_words
+    
 
     visual_feedback()
     
 def visual_feedback():
-    global length_points, character_points, points_common, points_words, points_breaches
+    global length_points, character_points, total_points
 
     if length_points == 5:
-        points_length.text = "Length: ⭐️⭐️⭐️⭐️⭐️⭐️"
+        points_length.text = "Length: ⭐️⭐️⭐️⭐️⭐️"
     elif length_points == 4:
         points_length.text = "Length: ⭐️⭐️⭐️⭐️"
     elif length_points == 3:
@@ -151,7 +161,7 @@ def visual_feedback():
         points_length.text = "Length: ⭐️"
 
     if character_points == 5:
-        points_character.text = "Characters: ⭐️⭐️⭐️⭐️⭐️⭐️"
+        points_character.text = "Characters: ⭐️⭐️⭐️⭐️⭐️"
     elif character_points == 4:
         points_character.text = "Characters: ⭐️⭐️⭐️⭐️"
     elif character_points == 3:
@@ -161,22 +171,23 @@ def visual_feedback():
     elif character_points == 1:
         points_character.text = "Characters: ⭐️"
 
-    total_points = (str(points_common + points_breaches + points_words))
-    if total_points == "5":
-        total_points_lbl.text = "Frequency: ⭐️⭐️⭐️⭐️⭐️⭐️"
-    elif total_points == "4":
+    if total_points == 5:
+        total_points_lbl.text = "Frequency: ⭐️⭐️⭐️⭐️⭐️"
+    elif total_points == 4:
         total_points_lbl.text = "Frequency: ⭐️⭐️⭐️⭐️"
-    elif total_points == "3":
+    elif total_points == 3:
         total_points_lbl.text = "Frequency: ⭐️⭐️⭐️"
-    elif total_points == "2":
+    elif total_points == 2:
         total_points_lbl.text = "Frequency: ⭐️⭐️"
-    elif total_points == "1":
+    elif total_points == 1:
+        total_points_lbl.text = "Frequency: ⭐️"
+    else:
         total_points_lbl.text = "Frequency: ⭐️"
 
-    overall.text = str(math.floor((length_points + character_points + points_common + points_breaches + points_words) / 3))
+    overall.text = str(math.floor((length_points + character_points + total_points) / 3))
 
     if overall.text == "5":
-        overall.text = "Overall: ⭐️⭐️⭐️⭐️⭐️⭐️"
+        overall.text = "Overall: ⭐️⭐️⭐️⭐️⭐️"
     elif overall.text == "4":
         overall.text = "Overall: ⭐️⭐️⭐️⭐️"
     elif overall.text == "3":
@@ -255,16 +266,16 @@ app.add(sep_v, 4,2, row_span=5, align='center')
 
 app.add(password_strength, 6,1)
 
-app.add(check_password,7,1)
+app.add(check_password,8,1)
 
 #app.add
-app.add(points_length, ,3)
+app.add(points_length, 6,3)
 app.add(points_character , 7,3)
 app.add(total_points_lbl, 8,3)
 app.add(overall, 4,3)
 
 
-app.add(amount_of_breaches, 8,1)
+app.add(amount_of_breaches, 7,1)
 
 
 
