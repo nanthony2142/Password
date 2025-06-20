@@ -1,6 +1,7 @@
 import gooeypie as gp
 import hashlib
 import requests
+import math
 symbols = ["!", "@", "#", "$", "%", "^", "&", "*", "(", ")", "-", "_", "+", "=", "{", "}", "[", "]", "|", ";", ":", "'", '"', "<", ">", ",", ".", "?", "/"]
 letters = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z",]
 fonts = ['verdana']
@@ -9,8 +10,10 @@ styles = ['italic']
 capital = [letter.upper() for letter in letters]
 length_points = 1
 character_points = 1
-points = 1
-
+points_common = 1
+points_words = 0
+points_breaches = 0
+points = 0
 
 def check_breaches():        
         sha1_password = hashlib.sha1(password_input.text.encode('utf-8')).hexdigest().upper()
@@ -37,15 +40,15 @@ def check_password_length(event):
         length_points = 5 
 
     elif len(password) >=8:
-        level_of_password.text = "Your password is a bit too short. \nIt should be at least 12 characters long."
+        level_of_password.text = "Your password is a bit too short. \nIt's recommended to be at least 12 characters long."
         length_points = 4
 
     elif len(password) >=6:
-        level_of_password.text = "Your password is very weak. \nIt should be at least 12 characters long."
+        level_of_password.text = "Your password is very weak. \nIt's recommended to be at least 12 characters long."
         length_points = 3
 
     elif len(password) >=4:
-        level_of_password.text = "Your password is extremely weak. \nIt should be at least 12 characters long."
+        level_of_password.text = "Your password is extremely weak. \nIt's recommended to be at least 12 characters long."
         length_points = 2
 
     else:
@@ -93,7 +96,7 @@ def check_characters():
     check_common_passwords()
   
 def check_common_passwords():
-    global points, common_word_points
+    global points, points_common, points_words, points_breaches
     f = open("common_passwords.txt")
     
     common_passwords = f.readlines()
@@ -105,47 +108,90 @@ def check_common_passwords():
     
     if password_input.text in clean_passwords:
         check_password.text = "Your password is very commonly used. \nIt's highly recommended you don't use it."
-        points = points + 0
     else:
-        f = open("common_words.txt")
-        points = points + 2
+        points_common = 1
+
+    f = open("common_words.txt")
+
+    common_words = f.readlines()
+    clean_words = []
+
+    for word in common_words:
+        word = word.replace("\n", "")
+        clean_words.append(word)
     
-        common_words = f.readlines()
-        clean_words = []
-    
-        for word in common_words:
-            word = word.replace("\n", "")
-            clean_words.append(word)
-        
-        if password_input.text in clean_words:
-            check_password.text = "Your password contains very common words.\nIt's recommended you don't use it."
-            points = points + 0
-        else:
-            points = points + 2
+    if password_input.text in clean_words:
+        check_password.text = "Your password contains very common words.\nIt's recommended you don't use it."
+    else:
+        points_words = 1
 
     breach_count = check_breaches()
 
     if breach_count == 0:
         amount_of_breaches.text = "There are no known breaches with that password"
-        points = points + 3
+        points_breaches = 3
     else:
         amount_of_breaches.text = "There are {} breaches with that password".format(breach_count)
-        points = points + 2
 
 
     visual_feedback()
     
 def visual_feedback():
-    global length_points, character_points, common_word_points
-    points_length.text = (length_points)
-    points_character.text = (character_points)
-    points_words.text = (points)
-    points_overall.text = ((length_points + character_points + points)/3)
-    
+    global length_points, character_points, points_common, points_words, points_breaches
+
+    if length_points == 5:
+        points_length.text = "Length: ⭐️⭐️⭐️⭐️⭐️⭐️"
+    elif length_points == 4:
+        points_length.text = "Length: ⭐️⭐️⭐️⭐️"
+    elif length_points == 3:
+        points_length.text = "Length: ⭐️⭐️⭐️"
+    elif length_points == 2:
+        points_length.text = "Length: ⭐️⭐️"
+    elif length_points == 1:
+        points_length.text = "Length: ⭐️"
+
+    if character_points == 5:
+        points_character.text = "Characters: ⭐️⭐️⭐️⭐️⭐️⭐️"
+    elif character_points == 4:
+        points_character.text = "Characters: ⭐️⭐️⭐️⭐️"
+    elif character_points == 3:
+        points_character.text = "Characters: ⭐️⭐️⭐️"
+    elif character_points == 2:
+        points_character.text = "Characters: ⭐️⭐️"
+    elif character_points == 1:
+        points_character.text = "Characters: ⭐️"
+
+    total_points = (str(points_common + points_breaches + points_words))
+    if total_points == "5":
+        total_points_lbl.text = "Frequency: ⭐️⭐️⭐️⭐️⭐️⭐️"
+    elif total_points == "4":
+        total_points_lbl.text = "Frequency: ⭐️⭐️⭐️⭐️"
+    elif total_points == "3":
+        total_points_lbl.text = "Frequency: ⭐️⭐️⭐️"
+    elif total_points == "2":
+        total_points_lbl.text = "Frequency: ⭐️⭐️"
+    elif total_points == "1":
+        total_points_lbl.text = "Frequency: ⭐️"
+
+    overall.text = str(math.floor((length_points + character_points + points_common + points_breaches + points_words) / 3))
+
+    if overall.text == "5":
+        overall.text = "Overall: ⭐️⭐️⭐️⭐️⭐️⭐️"
+    elif overall.text == "4":
+        overall.text = "Overall: ⭐️⭐️⭐️⭐️"
+    elif overall.text == "3":
+        overall.text = "Overall: ⭐️⭐️⭐️"
+    elif overall.text == "2":
+        overall.text = "Overall: ⭐️⭐️"
+    elif overall.text == "1":
+        overall.text = "Overall: ⭐️"
+
+
+
 ###### Create the app window ######
 
 app = gp.GooeyPieApp("Passolution")
-app.set_size(700, 400)
+app.set_size(840, 400)
 
 ##### Create widgets ######
 
@@ -172,13 +218,23 @@ intro_of_app.font_style = 'italic'
 password_strength = gp.Label(app, "")
 check_password = gp.Label(app, "")
 
-points_overall = gp.Label(app, "")
-points_character = gp.Label(app, "")
-points_words = gp.Label(app, "")
-points_length = gp.Label(app, "")
 amount_of_breaches = gp.Label(app, "")
 
+points_length = gp.StyleLabel(app, "")
+points_length.font_name = 'Verdana'
+points_length.font_size = 17
 
+total_points_lbl = gp.StyleLabel(app, "")
+total_points_lbl.font_name = 'Verdana'
+total_points_lbl.font_size = 17
+
+points_character = gp.StyleLabel(app, "")
+points_character.font_name = 'Verdana'
+points_character.font_size = 17
+
+overall = gp.StyleLabel(app, "")
+overall.font_name = 'Verdana'
+overall.font_size = 25
 
 ###### set up a grid #######
 
@@ -201,10 +257,12 @@ app.add(password_strength, 6,1)
 
 app.add(check_password,7,1)
 
-app.add(points_length, 5,3)
-app.add(points_character , 6,3)
-app.add(points_words, 7,3)
-app.add(points_overall, 4,3)
+#app.add
+app.add(points_length, ,3)
+app.add(points_character , 7,3)
+app.add(total_points_lbl, 8,3)
+app.add(overall, 4,3)
+
 
 app.add(amount_of_breaches, 8,1)
 
