@@ -8,7 +8,6 @@ letters = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n",
 fonts = ['verdana']
 styles = ['italic']
 colours = ['red', 'blue', 'green', 'purple', 'orange', 'pink', 'yellow', 'cyan']
-
 capital = [letter.upper() for letter in letters]
 length_points = 1
 character_points = 1
@@ -17,7 +16,6 @@ total_points = 1
 points_common = 0
 points_words = 0
 points_breaches = 0
-
 def check_breaches():        
         sha1_password = hashlib.sha1(password_input.text.encode('utf-8')).hexdigest().upper()
         prefix = sha1_password[:5]
@@ -109,15 +107,18 @@ def check_common_passwords():
     
     common_passwords = f.readlines()
     clean_passwords = []
+   
  
     for password in common_passwords:
         password = password.replace("\n", "")
         clean_passwords.append(password)
+
+    #print(clean_passwords)
     
     if password_input.text in clean_passwords:
+
         check_password.text = "Your password is very commonly used. \nIt's highly recommended you don't use it."
     else:
-        check_password.text = ""
         points_common = 1
 
     f = open("common_words.txt")
@@ -132,7 +133,6 @@ def check_common_passwords():
     if password_input.text in clean_words:
         check_password.text = "Your password contains very common words.\nIt's recommended you don't use it."
     else:
-        check_password.text = ""
         points_words = 1
 
     breach_count = check_breaches()
@@ -221,9 +221,7 @@ app.set_size(880, 400)
 
 ##### Create widgets ######
 
-
 result_lbl_title = gp.Label(app, "")
-
 level_of_password = gp.Label(app, "")
 prompt_lbl = gp.Label(app, "Enter your password:")
 password_input = gp.Secret(app)
@@ -233,44 +231,35 @@ submit_bin = gp.Button(app, "Check password", check_password_length)
 test_new = gp.Label(app, "4, 4")
 sep_v = gp.Separator(app, 'vertical')
 explain_procedure = gp.Label(app, "Enter password:")
-
 check = gp.Checkbox(app, 'Show password')
 check.add_event_listener('change', toggle_mask)
-
-
 intro_of_app = gp.StyleLabel(app, "Only the fittest passwords survive!")
 intro_of_app.font_name = 'Verdana' 
 intro_of_app.font_size = 25            
 intro_of_app.font_style = 'italic'      
-
-
 password_strength = gp.Label(app, "")
 check_password = gp.Label(app, "")
-
 amount_of_breaches = gp.Label(app, "")
-
 points_length = gp.StyleLabel(app, "")
 points_length.font_name = 'Verdana'
 points_length.font_size = 17
 points_length.add_event_listener('mouse_over',points_length_mouse_over)
-
 total_points_lbl = gp.StyleLabel(app, "")
 total_points_lbl.font_name = 'Verdana'
 total_points_lbl.font_size = 17
 total_points_lbl.add_event_listener('mouse_over', total_points_lbl_mouse_over)
-
 points_character = gp.StyleLabel(app, "")
 points_character.font_name = 'Verdana'
 points_character.font_size = 17
 points_character.add_event_listener('mouse_over', character_points_mouse)
-
 overall = gp.StyleLabel(app, "")
 overall.font_name = 'Verdana'
 overall.font_size = 25
 overall.add_event_listener('mouse_over', overall_mouse)
-
-link = gp.Hyperlink(app, "warning","https://www.youtube.com/watch?v=xvFZjo5PgG0")
+link = gp.Hyperlink(app, "💀🥀","https://www.youtube.com/watch?v=xvFZjo5PgG0")
 link.font_size = 5
+tutorial = gp.Hyperlink(app, "A Demo of Passolution", "https://www.youtube.com/watch?v=DVi-sE-UwLw")
+
 ###### set up a grid #######
 
 app.set_grid(8, 3)
@@ -278,39 +267,23 @@ app.set_grid(8, 3)
 ###### Add widgets to the grid ######
 
 app.add(intro_of_app, 1, 1, column_span=3, align='center')
-
 app.add(password_input, 2, 2)
 app.add(explain_procedure, 2, 1, align='right')
 app.add(submit_bin, 3, 2, align='left')
-
 app.add(result_lbl_title, 4, 1)
 app.add(level_of_password, 5,1, column_span=2)
-
 app.add(sep_v, 4,2, row_span=5, align='center')
-
 app.add(password_strength, 6,1)
-
 app.add(check_password,8,1)
-
-#app.add
 app.add(points_length, 6,3)
 app.add(points_character , 7,3)
 app.add(total_points_lbl, 8,3)
 app.add(overall, 4,3)
-
-
 app.add(amount_of_breaches, 7,1)
-
 app.add(check, 3, 1 , align='right')
-
-app.add(link, 2, 3, align='center')
-
+app.add(link, 2, 3, align='right')
+app.add(tutorial, 3, 3,)
 
 ###### run the app ######
 
 app.run()
-
-
-# problem: line is not working to seperate the two columns
-
-# unperadictablity: the password is not being checked for length, symbols, and numbers correctly.
