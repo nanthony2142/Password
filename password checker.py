@@ -228,8 +228,6 @@ def copy_password(event):
         copied_password.text = "No password to copy"
 
 
-
-
 ###### Create the app window ######
 
 app = gp.GooeyPieApp("Passolution")
@@ -290,7 +288,7 @@ app.add(explain_procedure, 2, 1, align='right')
 app.add(submit_bin, 3, 2, align='left')
 app.add(result_lbl_title, 4, 1)
 app.add(level_of_password, 5,1, column_span=2)
-app.add(sep_v, 4,2, row_span=5, align='center')
+app.add(sep_v, 4,2, row_span=7, align='center')
 app.add(password_strength, 6,1)
 app.add(check_password,8,1)
 app.add(points_length, 5,3)
