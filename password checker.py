@@ -2,10 +2,12 @@ import gooeypie as gp
 import hashlib
 import requests
 import math
+from random import choice
 symbols = ["!", "@", "#", "$", "%", "^", "&", "*", "(", ")", "-", "_", "+", "=", "{", "}", "[", "]", "|", ";", ":", "'", '"', "<", ">", ",", ".", "?", "/"]
 letters = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z",]
 fonts = ['verdana']
 styles = ['italic']
+colours = ['red', 'blue', 'green', 'purple', 'orange', 'pink', 'yellow', 'cyan']
 
 capital = [letter.upper() for letter in letters]
 length_points = 1
@@ -200,7 +202,17 @@ def visual_feedback():
 def toggle_mask(event):
     password_input.toggle()
 
+def overall_mouse(event):
+        overall.color = choice(colours)
 
+def character_points_mouse(event):
+    points_character.color = choice(colours)
+
+def total_points_lbl_mouse_over(event):
+    total_points_lbl.color = choice(colours)
+
+def points_length_mouse_over(event):
+    points_length.color = choice(colours)
 
 ###### Create the app window ######
 
@@ -240,19 +252,25 @@ amount_of_breaches = gp.Label(app, "")
 points_length = gp.StyleLabel(app, "")
 points_length.font_name = 'Verdana'
 points_length.font_size = 17
+points_length.add_event_listener('mouse_over',points_length_mouse_over)
 
 total_points_lbl = gp.StyleLabel(app, "")
 total_points_lbl.font_name = 'Verdana'
 total_points_lbl.font_size = 17
+total_points_lbl.add_event_listener('mouse_over', total_points_lbl_mouse_over)
 
 points_character = gp.StyleLabel(app, "")
 points_character.font_name = 'Verdana'
 points_character.font_size = 17
+points_character.add_event_listener('mouse_over', character_points_mouse)
 
 overall = gp.StyleLabel(app, "")
 overall.font_name = 'Verdana'
 overall.font_size = 25
+overall.add_event_listener('mouse_over', overall_mouse)
 
+link = gp.Hyperlink(app, "warning","https://www.youtube.com/watch?v=xvFZjo5PgG0")
+link.font_size = 5
 ###### set up a grid #######
 
 app.set_grid(8, 3)
@@ -284,6 +302,8 @@ app.add(overall, 4,3)
 app.add(amount_of_breaches, 7,1)
 
 app.add(check, 3, 1 , align='right')
+
+app.add(link, 2, 3, align='center')
 
 
 ###### run the app ######
