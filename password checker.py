@@ -197,12 +197,15 @@ def visual_feedback():
     elif overall.text == "1":
         overall.text = "Overall: ⭐️"
 
+def toggle_mask(event):
+    password_input.toggle()
+
 
 
 ###### Create the app window ######
 
 app = gp.GooeyPieApp("Passolution")
-app.set_size(840, 400)
+app.set_size(880, 400)
 
 ##### Create widgets ######
 
@@ -211,13 +214,16 @@ result_lbl_title = gp.Label(app, "")
 
 level_of_password = gp.Label(app, "")
 prompt_lbl = gp.Label(app, "Enter your password:")
-password_input = gp.Textbox(app)
+password_input = gp.Secret(app)
 password_input.width = 25
 password_input.height = 1
 submit_bin = gp.Button(app, "Check password", check_password_length)
 test_new = gp.Label(app, "4, 4")
 sep_v = gp.Separator(app, 'vertical')
 explain_procedure = gp.Label(app, "Enter password:")
+
+check = gp.Checkbox(app, 'Show password')
+check.add_event_listener('change', toggle_mask)
 
 
 intro_of_app = gp.StyleLabel(app, "Only the fittest passwords survive!")
@@ -277,6 +283,7 @@ app.add(overall, 4,3)
 
 app.add(amount_of_breaches, 7,1)
 
+app.add(check, 3, 1 , align='right')
 
 
 ###### run the app ######
