@@ -1,8 +1,12 @@
 import gooeypie as gp
 import hashlib
+from pwnedpasswords import Password
 import requests
 import math
 from random import choice
+import pyperclip
+
+
 symbols = ["!", "@", "#", "$", "%", "^", "&", "*", "(", ")", "-", "_", "+", "=", "{", "}", "[", "]", "|", ";", ":", "'", '"', "<", ">", ",", ".", "?", "/"]
 letters = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z",]
 fonts = ['verdana']
@@ -42,7 +46,7 @@ def check_password_length(event):
         length_points = 5 
 
     elif len(password) >=8:
-        level_of_password.text = "Your password is a bit too short. \nIt's recommended to be at least 12 characters long."
+        level_of_password.text = "Your password is slightly too short. \nIt's recommended to be at least 12 characters long."
         length_points = 4
 
     elif len(password) >=6:
@@ -215,10 +219,21 @@ def total_points_lbl_mouse_over(event):
 def points_length_mouse_over(event):
     points_length.color = choice(colours)
 
+def copy_password(event):
+    pw = password_input.text
+    if pw:
+        pyperclip.copy(pw)
+        copied_password.text = "Password copied to clipboard"
+    else:
+        copied_password.text = "No password to copy"
+
+
+
+
 ###### Create the app window ######
 
 app = gp.GooeyPieApp("Passolution")
-app.set_size(880, 400)
+app.set_size(880, 420)
 
 ##### Create widgets ######
 
@@ -260,10 +275,12 @@ overall.add_event_listener('mouse_over', overall_mouse)
 link = gp.Hyperlink(app, "💀🥀","https://www.youtube.com/watch?v=xvFZjo5PgG0")
 link.font_size = 5
 tutorial = gp.Hyperlink(app, "A Demo of Passolution", "https://www.youtube.com/watch?v=DVi-sE-UwLw")
+copied_password = gp.Label(app, "")
+copy_button = gp.Button(app, "Copy Password", copy_password)
 
 ###### set up a grid #######
 
-app.set_grid(8, 3)
+app.set_grid(10, 3)
 
 ###### Add widgets to the grid ######
 
@@ -276,15 +293,16 @@ app.add(level_of_password, 5,1, column_span=2)
 app.add(sep_v, 4,2, row_span=5, align='center')
 app.add(password_strength, 6,1)
 app.add(check_password,8,1)
-app.add(points_length, 6,3)
-app.add(points_character , 7,3)
-app.add(total_points_lbl, 8,3)
+app.add(points_length, 5,3)
+app.add(points_character , 6,3)
+app.add(total_points_lbl, 7,3)
 app.add(overall, 4,3)
 app.add(amount_of_breaches, 7,1)
 app.add(check, 3, 1 , align='right')
 app.add(link, 2, 3, align='right')
 app.add(tutorial, 3, 3,)
-
+app.add(copy_button, 10, 1, align='center')
+app.add(copied_password, 9, 1,)
 ###### run the app ######
 
 app.run()
