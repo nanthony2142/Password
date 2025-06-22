@@ -1,5 +1,4 @@
-![image alt](https://github.com/nanthony2142/Password/blob/8ba1aa74de4e3df0a75ed0bbbae9a8f35575600f/logo.png)
-
+![image alt](https://github.com/nanthony2142/Password/blob/614c6d14e971ca4bd1f8abc20be0ec710efa617b/logo2.png)
 # 🔐 Password Strength Checker
 
 
