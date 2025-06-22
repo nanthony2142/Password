@@ -4,7 +4,7 @@
 
 ## 📖 Overview
 
-Weak and predictable passwords are one of the most common causes of data breaches, providing easy access for cybercriminals to personal devices, accounts, and sensitive information. This application addresses that risk by offering a Python-based graphical user interface that checks the strength of user passwords, giving real-time feedback and suggestions to improve password security.
+Weak and predictable passwords are one of the most common causes of data breaches, providing easy access for cybercriminals to access personal devices, accounts, and sensitive information. The application addresses this risk by offering a Python-based graphical user interface that checks the strength of user passwords, giving real-time feedback and suggestions to improve password security.
 
 ## ⭐ Features
 ✅ Real-time strength analysis based on length, character diversity, and whether the password has been commonly used.
