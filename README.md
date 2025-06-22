@@ -1,5 +1,5 @@
 ![image alt](https://github.com/nanthony2142/Password/blob/614c6d14e971ca4bd1f8abc20be0ec710efa617b/logo2.png)
-# 🔐 Password Strength Checker
+# 🔐 Passolution - Only the fittest passwords survive
 
 
 ## 📖 Overview
