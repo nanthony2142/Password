@@ -1,3 +1,5 @@
+![Logo](https://github.com/nanthony2142/Password/master/logo.png)
+
 
 # 🔐 Password Strength Checker
 
