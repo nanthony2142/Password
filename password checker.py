@@ -121,7 +121,6 @@ def check_common_passwords():
     #print(clean_passwords)
     
     if password_input.text in clean_passwords:
-
         check_password.text = "Your password is commonly used. \nIt's highly recommended you don't use it."
     else:
         points_common = 1
@@ -139,6 +138,9 @@ def check_common_passwords():
         check_password.text = "Your password is a common word.\nIt's recommended you don't use it."
     else:
         points_words = 1
+
+    if points_common == 1 and points_words == 1:
+        check_password.text = ""
 
     breach_count = check_breaches()
 
