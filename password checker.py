@@ -272,8 +272,6 @@ overall = gp.StyleLabel(app, "")
 overall.font_name = 'Verdana'
 overall.font_size = 25
 overall.add_event_listener('mouse_over', overall_mouse)
-link = gp.Hyperlink(app, "💀🥀","https://www.youtube.com/watch?v=xvFZjo5PgG0")
-link.font_size = 5
 tutorial = gp.Hyperlink(app, "A Demo of Passolution", "https://www.youtube.com/watch?v=DVi-sE-UwLw")
 copied_password = gp.Label(app, "")
 copy_button = gp.Button(app, "Copy Password", copy_password)
@@ -299,7 +297,6 @@ app.add(total_points_lbl, 7,3)
 app.add(overall, 4,3)
 app.add(amount_of_breaches, 7,1)
 app.add(check, 3, 1 , align='right')
-app.add(link, 2, 3, align='right')
 app.add(tutorial, 3, 3,)
 app.add(copy_button, 10, 1, align='center')
 app.add(copied_password, 9, 1,)
